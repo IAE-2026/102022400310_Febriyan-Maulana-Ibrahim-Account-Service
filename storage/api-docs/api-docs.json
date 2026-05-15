@@ -1,0 +1,99 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Account Service API",
+        "description": "API Documentation for Account Service",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/accounts": {
+            "get": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Get all accounts",
+                "operationId": "711693597de5eaa769a511d9549dc0b5",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Create new account",
+                "operationId": "a4b59465890290efb7f789b10db6b318",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "account_number",
+                                    "name",
+                                    "email"
+                                ],
+                                "properties": {
+                                    "account_number": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "balance": {
+                                        "type": "number"
+                                    },
+                                    "status": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Account created successfully"
+                    }
+                }
+            }
+        },
+        "/api/v1/accounts/{accountNumber}": {
+            "get": {
+                "tags": [
+                    "Accounts"
+                ],
+                "summary": "Get account detail",
+                "operationId": "2ea9a8766fc43b36f15da22db38d8936",
+                "parameters": [
+                    {
+                        "name": "accountNumber",
+                        "in": "path",
+                        "description": "Account Number",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Accounts",
+            "description": "Accounts"
+        }
+    ]
+}
