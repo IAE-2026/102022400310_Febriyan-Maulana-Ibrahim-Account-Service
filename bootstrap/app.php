@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'apikey' => \App\Http\Middleware\ApiKeyMiddleware::class,
+            'sso' => \App\Http\Middleware\VerifyDosenSso::class,
         ]);
         
     })

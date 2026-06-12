@@ -6,9 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\Account;
 use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
+use App\Services\SoapService;
+use App\Services\RabbitMqService;
 
 class AccountController extends Controller
 {
+    protected $soapService;
+    protected $rabbitMqService;
+    
+    public function __construct(
+        SoapService $soapService,
+        RabbitMqService $rabbitMqService
+    ) {
+        $this->soapService = $soapService;
+        $this->rabbitMqService = $rabbitMqService;
+    }
     #[OA\Get(
     path: "/api/v1/accounts",
     summary: "Get all accounts",
@@ -101,17 +113,55 @@ class AccountController extends Controller
     ]
 )]
     public function store(Request $request)
-    {
-        $account = Account::create($request->all());
+{
+    $ssoUser = $request->attributes->get('sso_user');
+
+    if (!$ssoUser) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'SSO user not found'
+        ], 401);
+    }
+
+    $profile = $ssoUser['profile'];
+
+    try {
+
+        $account = Account::updateOrCreate(
+            [
+                'email' => $profile['email']
+            ],
+            [
+                'account_number' => $profile['nim'],
+                'name' => $profile['name'],
+                'balance' => 0,
+                'status' => 'active',
+                'role' => 'customer'
+            ]
+        );
+
+        $soapResult = $this->soapService->sendAuditLog($account);
+
+        $rabbitResult = $this->rabbitMqService->publishAccountEvent($account);
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Account created successfully',
+            'message' => 'Account synchronized successfully',
+            'soap' => $soapResult,
+            'rabbitmq' => $rabbitResult,
             'data' => $account,
             'meta' => [
                 'service_name' => 'Account-Service',
                 'api_version' => 'v1'
             ]
-        ], 201);
+        ]);
+
+    } catch (\Exception $e) {
+
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
     }
+}
 }

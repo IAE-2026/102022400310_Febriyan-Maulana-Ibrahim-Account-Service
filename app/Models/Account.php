@@ -11,6 +11,7 @@ class Account extends Model
         'name',
         'email',
         'balance',
-        'status'
+        'status',
+        'role'
     ];
 }

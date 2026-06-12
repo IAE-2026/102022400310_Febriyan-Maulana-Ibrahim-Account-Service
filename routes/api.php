@@ -11,6 +11,7 @@ Route::prefix('v1')
 
         Route::get('/accounts/{accountNumber}', [AccountController::class, 'show']);
 
-        Route::post('/accounts', [AccountController::class, 'store']);
+        Route::post('/accounts', [AccountController::class, 'store'])
+            ->middleware('sso');
 
 });
