@@ -10,6 +10,7 @@
         "darkaonline/l5-swagger": "^11.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "mll-lab/laravel-graphql-playground": "^1.1",
         "rebing/graphql-laravel": "^9.17"
     },
     "require-dev": {

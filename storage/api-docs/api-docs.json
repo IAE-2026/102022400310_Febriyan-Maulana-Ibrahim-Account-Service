@@ -15,9 +15,19 @@
                 "operationId": "711693597de5eaa769a511d9549dc0b5",
                 "responses": {
                     "200": {
-                        "description": "Success"
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
             },
             "post": {
                 "tags": [
@@ -59,9 +69,22 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Account created successfully"
+                        "description": "Account created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "BearerAuth": []
+                    }
+                ]
             }
         },
         "/api/v1/accounts/{accountNumber}": {
@@ -84,9 +107,29 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success"
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "description": "Masukkan API Key Anda (Contoh: 102022400310)",
+                "name": "X-IAE-KEY",
+                "in": "header"
             }
         }
     },

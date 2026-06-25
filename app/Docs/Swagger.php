@@ -9,6 +9,13 @@ use OpenApi\Attributes as OA;
     title: "Account Service API",
     description: "API Documentation for Account Service"
 )]
+#[OA\SecurityScheme(
+    securityScheme: "ApiKeyAuth",
+    type: "apiKey",
+    in: "header",
+    name: "X-IAE-KEY",
+    description: "Masukkan API Key Anda (Contoh: 102022400310)"
+)]
 class Swagger
 {
 }
