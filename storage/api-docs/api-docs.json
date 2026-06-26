@@ -5,6 +5,12 @@
         "description": "API Documentation for Account Service",
         "version": "1.0.0"
     },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Docker local server"
+        }
+    ],
     "paths": {
         "/api/v1/accounts": {
             "get": {
@@ -15,10 +21,71 @@
                 "operationId": "711693597de5eaa769a511d9549dc0b5",
                 "responses": {
                     "200": {
-                        "description": "Success",
+                        "description": "Accounts retrieved successfully",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "required": [
+                                        "status",
+                                        "message",
+                                        "data",
+                                        "meta"
+                                    ],
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Accounts retrieved successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Account"
+                                            }
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "service_name": {
+                                                    "type": "string",
+                                                    "example": "Account-Service"
+                                                },
+                                                "api_version": {
+                                                    "type": "string",
+                                                    "example": "v1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        },
+                                        "errors": {
+                                            "example": null,
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     }
@@ -47,19 +114,34 @@
                                 ],
                                 "properties": {
                                     "account_number": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "102022400310"
                                     },
                                     "name": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "Febriyan Maulana Ibrahim"
                                     },
                                     "email": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "febriyan@example.com"
                                     },
                                     "balance": {
-                                        "type": "number"
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 50000
                                     },
                                     "status": {
-                                        "type": "string"
+                                        "type": "string",
+                                        "example": "active",
+                                        "enum": [
+                                            "active",
+                                            "inactive"
+                                        ]
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "customer"
                                     }
                                 },
                                 "type": "object"
@@ -72,7 +154,88 @@
                         "description": "Account created successfully",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "required": [
+                                        "status",
+                                        "message",
+                                        "data",
+                                        "meta"
+                                    ],
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Account created successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Account"
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "service_name": {
+                                                    "type": "string",
+                                                    "example": "Account-Service"
+                                                },
+                                                "api_version": {
+                                                    "type": "string",
+                                                    "example": "v1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        },
+                                        "errors": {
+                                            "example": null,
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation failed"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     }
@@ -80,25 +243,22 @@
                 "security": [
                     {
                         "ApiKeyAuth": []
-                    },
-                    {
-                        "BearerAuth": []
                     }
                 ]
             }
         },
-        "/api/v1/accounts/{accountNumber}": {
+        "/api/v1/accounts/{id}": {
             "get": {
                 "tags": [
                     "Accounts"
                 ],
                 "summary": "Get account detail",
-                "operationId": "2ea9a8766fc43b36f15da22db38d8936",
+                "operationId": "220e72049ff3d3c659aa7034aa58b2c4",
                 "parameters": [
                     {
-                        "name": "accountNumber",
+                        "name": "id",
                         "in": "path",
-                        "description": "Account Number",
+                        "description": "Account ID",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -107,10 +267,92 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success",
+                        "description": "Account retrieved successfully",
                         "content": {
                             "application/json": {
-                                "schema": {}
+                                "schema": {
+                                    "required": [
+                                        "status",
+                                        "message",
+                                        "data",
+                                        "meta"
+                                    ],
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Account retrieved successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Account"
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "service_name": {
+                                                    "type": "string",
+                                                    "example": "Account-Service"
+                                                },
+                                                "api_version": {
+                                                    "type": "string",
+                                                    "example": "v1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        },
+                                        "errors": {
+                                            "example": null,
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Account not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Account not found"
+                                        },
+                                        "errors": {
+                                            "example": null,
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
                             }
                         }
                     }
@@ -124,6 +366,55 @@
         }
     },
     "components": {
+        "schemas": {
+            "Account": {
+                "required": [
+                    "id",
+                    "account_number",
+                    "name",
+                    "email",
+                    "balance",
+                    "status"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "account_number": {
+                        "type": "string",
+                        "example": "102022400310"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Febriyan Maulana Ibrahim"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "febriyan@example.com"
+                    },
+                    "balance": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 100000
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active",
+                        "enum": [
+                            "active",
+                            "inactive"
+                        ]
+                    },
+                    "role": {
+                        "type": "string",
+                        "example": "customer"
+                    }
+                },
+                "type": "object"
+            }
+        },
         "securitySchemes": {
             "ApiKeyAuth": {
                 "type": "apiKey",

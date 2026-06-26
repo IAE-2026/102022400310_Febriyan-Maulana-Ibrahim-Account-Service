@@ -12,18 +12,10 @@ class ApiKeyMiddleware
     {
         $apiKey = $request->header('X-IAE-KEY');
 
-        // Ekstrak NIM secara dinamis dari nama folder proyek jika diawali dengan angka
-        $folderName = basename(base_path());
-        $dynamicNim = '';
-        if (preg_match('/^\d+/', $folderName, $matches)) {
-            $dynamicNim = $matches[0];
-        }
-
-        $validKeys = array_filter([
-            '102022400310',
-            $dynamicNim,
-            'KEY-MHS-334'
-        ]);
+        $validKeys = array_filter(array_map(
+            'trim',
+            explode(',', env('IAE_API_KEYS', env('IAE_API_KEY', '102022400310')))
+        ));
 
         if (!in_array($apiKey, $validKeys, true)) {
             return response()->json([

@@ -42,7 +42,8 @@ class VerifyDosenSso
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'Invalid JWT token'
+                'message' => 'Invalid JWT token',
+                'errors' => null
             ], 401);
         }
 

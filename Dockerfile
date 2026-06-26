@@ -6,16 +6,22 @@ RUN apt-get update && apt-get install -y \
     unzip \
     curl \
     libzip-dev \
-    zip
+    libsqlite3-dev \
+    zip \
+    && docker-php-ext-install pdo pdo_mysql pdo_sqlite zip \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install pdo pdo_mysql
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY . .
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader \
+    && chmod +x docker/entrypoint.sh \
+    && mkdir -p database storage/api-docs storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache \
+    && chmod -R 775 database storage bootstrap/cache
 
-RUN composer install
+ENTRYPOINT ["docker/entrypoint.sh"]
 
 EXPOSE 8000
 
-CMD php artisan serve --host=0.0.0.0 --port=8000
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
