@@ -4,6 +4,7 @@ services:
       context: .
     ports:
       - "8000:8000"
+    working_dir: /app
     environment:
       APP_NAME: Account-Service
       APP_ENV: local
@@ -17,3 +18,4 @@ services:
       QUEUE_CONNECTION: sync
       L5_SWAGGER_CONST_HOST: http://localhost:8000
       L5_SWAGGER_GENERATE_ALWAYS: "true"
+    command: php artisan serve --host=0.0.0.0 --port=8000

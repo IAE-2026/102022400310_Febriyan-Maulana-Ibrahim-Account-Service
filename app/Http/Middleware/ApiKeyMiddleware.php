@@ -19,9 +19,11 @@ class ApiKeyMiddleware
 
         if (!in_array($apiKey, $validKeys, true)) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
-                'errors' => null
+                'meta' => [
+                    'status' => 'error',
+                    'message' => 'Unauthorized'
+                ],
+                'data' => null
             ], 401);
         }
 
