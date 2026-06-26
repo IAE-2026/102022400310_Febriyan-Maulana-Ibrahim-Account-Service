@@ -12,13 +12,13 @@
         }
     ],
     "paths": {
-        "/api/v1/accounts": {
+        "/api/v1": {
             "get": {
                 "tags": [
                     "Accounts"
                 ],
                 "summary": "Get all accounts",
-                "operationId": "711693597de5eaa769a511d9549dc0b5",
+                "operationId": "cbf0bf9747f5549a5c8201bfd18876f7",
                 "responses": {
                     "200": {
                         "description": "Accounts retrieved successfully",
@@ -101,7 +101,7 @@
                     "Accounts"
                 ],
                 "summary": "Create new account",
-                "operationId": "a4b59465890290efb7f789b10db6b318",
+                "operationId": "096f6d60762fc2bba0fc867e1b26e161",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -247,13 +247,13 @@
                 ]
             }
         },
-        "/api/v1/accounts/{id}": {
+        "/api/v1/{id}": {
             "get": {
                 "tags": [
                     "Accounts"
                 ],
                 "summary": "Get account detail",
-                "operationId": "220e72049ff3d3c659aa7034aa58b2c4",
+                "operationId": "aa3715ad533e294361a192ee423bd4ef",
                 "parameters": [
                     {
                         "name": "id",

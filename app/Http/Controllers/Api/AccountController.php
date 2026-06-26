@@ -25,7 +25,7 @@ class AccountController extends Controller
         $this->rabbitMqService = $rabbitMqService;
     }
     #[OA\Get(
-        path: "/api/v1/accounts",
+        path: "/api/v1",
         summary: "Get all accounts",
         tags: ["Accounts"],
         security: [["ApiKeyAuth" => []]],
@@ -78,7 +78,7 @@ class AccountController extends Controller
     }
 
     #[OA\Get(
-        path: "/api/v1/accounts/{id}",
+        path: "/api/v1/{id}",
         summary: "Get account detail",
         tags: ["Accounts"],
         security: [["ApiKeyAuth" => []]],
@@ -154,7 +154,7 @@ class AccountController extends Controller
     }
 
     #[OA\Post(
-        path: "/api/v1/accounts",
+        path: "/api/v1",
         summary: "Create new account",
         tags: ["Accounts"],
         security: [["ApiKeyAuth" => []]],
